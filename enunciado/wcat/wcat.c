@@ -1,54 +1,36 @@
-#include <stdio.h>
+#include <stdio.h> 
 #include <stdlib.h>
-#include <string.h>
+#define A 1000 
 
-int main(int argc, char *argv[])  // argc =numero de argumentos , argv=puntero del argumento
+int main (int argc, char *argv[]) 
+
 {
-    if (argc == 1) // si es igual a 1 no hay argumentos
-    {
-        printf("wgrep: searchterm [file ...]\n");
-        exit(1);
-    }
+for (int i=1; i<argc;i++) //del segundo argumento en adelante
+	{
+	FILE *filep = fopen(argv[i], "r");// abrir archivo almacenar en f open
+	if (filep == NULL) // si el archivo esta mal escrito o es corrupto
+		{
+		    printf("wcat: cannot open file\n");
+		    exit(1); 
+		}
 
-    if (argc == 2) // hay un solo argumento
-    {
-        char buffer[1000]; //array de 1000 caracteres
-        while (fgets(buffer, 1000, stdin)) /* un apuntador hacia otro archivo para obtener una lectura de carácter
-			                              en caso de no especificar segundo argumento*/
-        {
-            if (strstr(buffer, argv[1]) != NULL) //busca en el buffer el argumento 1 osea la palabra 
-            {
-                printf("%s", buffer);
-            }
-        }
-    }
-    else
-    {
+	else 
+		{
 
-        for (int i = 2; i < argc; i++) // hay 2 o mas argumentos osea que hay palabra y archivos
-        {
 
-            char *line = NULL;  //puntero liena
-            size_t lenght = 0; // dende donde empieza
-            ssize_t read;// linea
+		char buffer[A]; // array de 1000 caracters
+		fgets(buffer,A,filep);// pasar primer caracter a buffer 
 
-            FILE *fp = fopen(argv[i], "r"); //leer archivo i=2
-            if (fp == NULL) // archivo  corrupto o mal escrito
-            {
-                printf("wgrep: cannot open file\n");
-                exit(1);
-            }
+		while (!feof(filep)) // mientras no final de archivo
+			{
 
-            while ((read = getline(&line, &lenght, fp)) != -1)// linea,desdeque caracter, archivo
-            {
+			printf("%s", buffer); //imprimir lo que hay en el buffer con string
+			fgets(buffer,A,filep); // seguri pasando al buffer
+			}
+		fclose(filep);  // cerrar archivo
 
-                if (strstr(line, argv[1]) != NULL)//argumento 1 en esta linea 
-                {
-                    printf("%s", line); // en esa linea se encuentra la palabra imprime
-                }
-            }
-            fclose(fp);// cierra este archivo
-        }
-    }
 
-    return 0;}
+		}
+	}
+exit(0); 
+} 
