@@ -19,13 +19,13 @@ for (int i=1; i<argc;i++) //del segundo argumento en adelante
 
 
 		char buffer[A]; // array de 1000 caracters
-		fgets(buffer,A,filep);// pasar primer caracter a buffer 
+		fgets(buffer,A,filep);// pasar caracter a buffer 
 
 		while (!feof(filep)) // mientras no final de archivo
 			{
 
 			printf("%s", buffer); //imprimir lo que hay en el buffer con string
-			fgets(buffer,A,filep); // seguri pasando al buffer
+			fgets(buffer,A,filep); // Seguir pasando al buffer
 			}
 		fclose(filep);  // cerrar archivo
 
