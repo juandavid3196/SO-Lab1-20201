@@ -30,7 +30,8 @@ int main(int argc, char *argv[])
             char *line = NULL;
             size_t lenght = 0;
             ssize_t read;
-        
+            
+
             FILE *fp = fopen(argv[i], "r");
             if (fp == NULL)
             {
