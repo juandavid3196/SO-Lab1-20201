@@ -1,44 +1,54 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 
-int main(int argc, char *argv[])
-{
-    if (argc == 1)
-    {
-        printf("wzip: file1 [file2 ...]\n");
-        exit(1);
-    }
-    int cont = 1;
-    char curCharFile;
-    for (int i = 1; i < argc; i++)
-    {
-        FILE *curFile = fopen(argv[i], "r");
-        if (curFile == NULL)
-        {
-            printf("wzip: cannot open file\n");
-            exit(1);
+int main(int argc, char *argv[]){
+    
+	int carAct;        
+    int carAnt;         
+	carAnt = EOF;       
+    unsigned int c; 
+    FILE *fp;          
+	
+	
+
+	c = 0;
+	
+	if (argc == 1){ 
+        printf("wzip: file1 [file2 ...]\n"); 
+        exit(1); 
+	}
+    
+	for (int i = 1; i < argc; i++){ 
+		fp = fopen(argv[i], "r"); 
+       
+        if (fp == NULL){             
+            printf("wzip: cannot open file\n"); 
+            exit(1); 
         }
-        char curCharIterator = fgetc(curFile);
-        while ((curFile = fgetc(curFile)) != EOF)
-        {
-            if (curCharFile == curCharIterator)
-            {
-                cont++;
+
+        while ((carAct = fgetc(fp)) != EOF){ 
+											 
+            if (carAnt != carAct && carAnt == EOF){
+                carAnt = carAct; 
+                c = 1;
             }
-            else
-            {
-                
-                fwrite(&cont, sizeof(int), 1, stdout);
-                fwrite(&curCharIterator, sizeof(char), 1, stdout);
-                curCharIterator = curCharFile;
-                cont = 1;
+            else if (carAnt == carAct){ 
+                c++;
+            }
+            else if (carAnt != carAct){ 
+
+                fwrite(&c, 4, 1, stdout);
+                fwrite(&carAnt, 1, 1, stdout); 
+                carAnt = carAct; 
+                c = 1;
             }
         }
-        fclose(curFile);
-        fwrite(&cont, sizeof(int), 1, stdout);
-        fwrite(&curCharIterator, sizeof(char), 1, stdout);
-        
+
+        fclose(fp);
     }
+
+    fwrite(&c, 1, 4, stdout);
+    fwrite(&carAnt, 1, 1, stdout);
     return 0;
 }
